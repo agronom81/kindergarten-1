@@ -13,6 +13,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "click-outside-vue3": "^4.0.1",
     "vue": "^3.2.38"
   },
   "devDependencies": {

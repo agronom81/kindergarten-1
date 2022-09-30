@@ -1,6 +1,9 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from "vue";
+import vClickOutside from "click-outside-vue3";
+import App from "./App.vue";
+const app = createApp(App);
+app.use(vClickOutside);
 
-import './assets/main.css'
+import "./assets/main.css";
 
-createApp(App).mount('#app')
+app.mount("#app");

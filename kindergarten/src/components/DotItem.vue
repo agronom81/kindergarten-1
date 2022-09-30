@@ -1,13 +1,16 @@
 <template>
   <div
+    ref="root"
     class="absolute w-8 h-8 rounded-full dotItem border"
     :style="{ top: top, left: left }"
   >
     <div
       v-show="isShow"
-      class="block w-52 h-24 bg-white shadow-2xl p-2 top-[-5rem] left-[-12rem] opacity-80 rounded-md"
+      class="block w-52 h-24 bg-white shadow-2xl p-2 top-[-5rem] left-[-87px] rounded-md fade-in"
     >
-      <p>Lorem ipsum dolor sit.</p>
+      <p>
+        <strong>{{ content.label }}:</strong> {{ content.description }}
+      </p>
     </div>
     <button
       @click="showPopUp"
@@ -18,16 +21,48 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 defineProps<{
   top: string;
   left: string;
+  content: {
+    label: string;
+    url?: string;
+    description: string;
+  };
 }>();
 
+const root = ref<HTMLElement | null>(null);
 const isShow = ref(false);
-function showPopUp() {
+const showPopUp = () => {
+  if (!isShow.value) {
+    playSound("http://soundbible.com/mp3/Grouse-SoundBible.com-381035918.mp3");
+  }
   isShow.value = !isShow.value;
-}
+};
+
+const playSound = (sound: string) => {
+  if (sound) {
+    var audio = new Audio(sound);
+    audio.play();
+  }
+};
+
+const clickOutside = () => {
+  const onClickOutside = (e: any) => {
+    if (root.value) {
+      isShow.value = root.value?.contains(e.target);
+    }
+  };
+  document.addEventListener("click", onClickOutside);
+  onBeforeUnmount(() => {
+    document.removeEventListener("click", onClickOutside);
+  });
+};
+
+onMounted(() => {
+  clickOutside();
+});
 </script>
 
 <style scoped>
