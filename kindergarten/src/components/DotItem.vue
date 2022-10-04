@@ -6,11 +6,50 @@
   >
     <div
       v-show="isShow"
-      class="block w-52 h-24 bg-white shadow-2xl p-2 top-[-5rem] left-[-87px] rounded-md fade-in"
+      class="block w-52 h-26 bg-white shadow-2xl p-4 top-[-5rem] left-[-87px] rounded-md fade-in"
     >
-      <p>
-        <strong>{{ content.label }}:</strong> {{ content.description }}
-      </p>
+      <div class="flex flex-col">
+        <p class="mb-2 flex-grow">
+          <strong>{{ content.label }}:</strong> {{ content.description }}
+        </p>
+        <button type="button" @click="soundStop" v-if="audioPlay">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-8 h-8 pointer-events-none"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M14.25 9v6m-4.5 0V9M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </button>
+        <button type="button" @click="soundStart" v-if="!audioPlay">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-8 h-8 pointer-events-none"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z"
+            />
+          </svg>
+        </button>
+      </div>
     </div>
     <button
       @click="showPopUp"
@@ -22,6 +61,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from "vue";
+import sound from "../assets/audio/onceagain.mp3";
 defineProps<{
   top: string;
   left: string;
@@ -34,23 +74,41 @@ defineProps<{
 
 const root = ref<HTMLElement | null>(null);
 const isShow = ref(false);
+const audio = ref<HTMLAudioElement>();
+const audioPlay = ref(false);
 const showPopUp = () => {
   if (!isShow.value) {
-    playSound("http://soundbible.com/mp3/Grouse-SoundBible.com-381035918.mp3");
+    playSound(sound);
   }
   isShow.value = !isShow.value;
 };
 
 const playSound = (sound: string) => {
   if (sound) {
-    var audio = new Audio(sound);
-    audio.play();
+    audio.value = new Audio(sound);
+    soundStart();
   }
+};
+
+const soundStop = () => {
+  audio.value?.pause();
+  audioPlay.value = false;
+};
+
+const soundStart = () => {
+  audio.value?.play();
+  audioPlay.value = true;
 };
 
 const clickOutside = () => {
   const onClickOutside = (e: any) => {
     if (root.value) {
+      if (!root.value?.contains(e.target)) {
+        audio.value?.pause();
+        audioPlay.value = false;
+      }
+
+      // audio.value?.currentTime = 0;
       isShow.value = root.value?.contains(e.target);
     }
   };
