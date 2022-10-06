@@ -6,49 +6,17 @@
   >
     <div
       v-show="isShow"
-      class="block w-52 h-26 bg-white shadow-2xl p-4 top-[-5rem] left-[-87px] rounded-md fade-in"
+      class="block w-52 h-26 bg-white shadow-2xl p-4 top-[-6rem] left-[-87px] rounded-md fade-in"
     >
       <div class="flex flex-col">
-        <p class="mb-2 flex-grow">
-          <strong>{{ content.label }}:</strong> {{ content.description }}
-        </p>
-        <button type="button" @click="soundStop" v-if="audioPlay">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-8 h-8 pointer-events-none"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M14.25 9v6m-4.5 0V9M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-        </button>
-        <button type="button" @click="soundStart" v-if="!audioPlay">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-8 h-8 pointer-events-none"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z"
-            />
-          </svg>
-        </button>
+        <div class="block">
+          <img :src="content.imgPath" :alt="content.label" />
+        </div>
+        <div class="block">
+          <p class="mb-2">
+            <strong>{{ content.label }}:</strong> {{ content.description }}
+          </p>
+        </div>
       </div>
     </div>
     <button
@@ -67,7 +35,7 @@ defineProps<{
   left: string;
   content: {
     label: string;
-    url?: string;
+    imgPath?: string;
     description: string;
   };
 }>();
@@ -75,7 +43,6 @@ defineProps<{
 const root = ref<HTMLElement | null>(null);
 const isShow = ref(false);
 const audio = ref<HTMLAudioElement>();
-const audioPlay = ref(false);
 const showPopUp = () => {
   if (!isShow.value) {
     playSound(sound);
@@ -86,18 +53,8 @@ const showPopUp = () => {
 const playSound = (sound: string) => {
   if (sound) {
     audio.value = new Audio(sound);
-    soundStart();
+    audio.value?.play();
   }
-};
-
-const soundStop = () => {
-  audio.value?.pause();
-  audioPlay.value = false;
-};
-
-const soundStart = () => {
-  audio.value?.play();
-  audioPlay.value = true;
 };
 
 const clickOutside = () => {
@@ -105,7 +62,6 @@ const clickOutside = () => {
     if (root.value) {
       if (!root.value?.contains(e.target)) {
         audio.value?.pause();
-        audioPlay.value = false;
       }
 
       // audio.value?.currentTime = 0;

@@ -2,7 +2,7 @@
   <main>
     <div class="w-[958px] mx-auto relative">
       <div class="mx-auto relative table fade-in">
-        <img class="block m-0" src="./assets/photo1.jpg" alt="image" />
+        <img class="block m-0" src="./assets/img/photo1.jpg" alt="image" />
         <DotItem top="450px" left="579px" :content="dotContent.item1"></DotItem>
         <DotItem top="587px" left="766px" :content="dotContent.item1"></DotItem>
         <DotItem top="707px" left="480px" :content="dotContent.item1"></DotItem>
@@ -18,6 +18,7 @@ import DotItem from "./components/DotItem.vue";
 const dotContent = ref({
   item1: {
     label: "Lorem",
+    imgPath: "/src/assets/img/board.png",
     description: "ipsum dolor sit amet consectetur adipisicing elit",
   },
 });
