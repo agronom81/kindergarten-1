@@ -6,10 +6,10 @@
   >
     <div
       v-show="isShow"
-      class="block w-52 h-26 bg-white shadow-2xl p-4 top-[-6rem] left-[-87px] rounded-md fade-in"
+      class="block w-52 h-26 bg-white shadow-2xl p-4 top-[-6rem] left-[-87px] rounded-md fade-in min-w-[300px]"
     >
-      <div class="flex flex-col">
-        <div class="block">
+      <div class="flex justify-between items-center gap-4">
+        <div class="block max-w-[100px]">
           <img :src="content.imgPath" :alt="content.label" />
         </div>
         <div class="block">
@@ -29,14 +29,15 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from "vue";
-import sound from "../assets/audio/onceagain.mp3";
-defineProps<{
+// import sound from "../assets/audio/onceagain.mp3";
+const props = defineProps<{
   top: string;
   left: string;
   content: {
     label: string;
     imgPath?: string;
     description: string;
+    sound: any;
   };
 }>();
 
@@ -45,7 +46,7 @@ const isShow = ref(false);
 const audio = ref<HTMLAudioElement>();
 const showPopUp = () => {
   if (!isShow.value) {
-    playSound(sound);
+    playSound(props.content.sound);
   }
   isShow.value = !isShow.value;
 };
