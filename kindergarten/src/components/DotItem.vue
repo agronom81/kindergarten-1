@@ -6,18 +6,13 @@
   >
     <div
       v-show="isShow"
-      class="block w-52 h-26 bg-white shadow-2xl p-4 top-[-6rem] left-[-87px] rounded-md fade-in min-w-[300px]"
+      class="flex justify-center items-center h-52 bg-white shadow-2xl p-4 top-[-12rem] left-[-87px] rounded-md fade-in w-52"
     >
-      <div class="flex justify-between items-center gap-4">
-        <div class="block max-w-[100px]">
-          <img :src="content.imgPath" :alt="content.label" />
-        </div>
-        <div class="block">
-          <p class="mb-2">
-            <strong>{{ content.label }}:</strong> {{ content.description }}
-          </p>
-        </div>
-      </div>
+      <img
+        class="block w-full rounded-md"
+        :src="content.imgPath"
+        :alt="content.label"
+      />
     </div>
     <button
       @click="showPopUp"
@@ -36,7 +31,6 @@ const props = defineProps<{
   content: {
     label: string;
     imgPath?: string;
-    description: string;
     sound: any;
   };
 }>();
